@@ -7,9 +7,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.model.Series;
 import com.example.demo.repository.SeriesRepository;
+
+
+
 
 @Service
 public class SeriesService {
@@ -50,25 +54,37 @@ public class SeriesService {
 		Page<Series> p=studsRepository.findAll(PageRequest.of(pnum, psize, Sort.by(name).descending()));
 		return p.getContent();
 	}
-//	public String Login(String un,String password)
-//	{
-//		Series user=studsRepository.findByname(un);
-//		if(user==null)
-//		{
-//			return"There is No User with this Name!";
-//		}
-//		else
-//		{
-//			if( user.getPassword().equals(password))
-//			{
-//				return "Logged in Successfully!";
-//			}
-//			else
-//			{
-//				return "Login Failed";
-//			}
-//		}
-//	}
+	public List<Series> fetchHeroByPrefix(String prefix)
+	{
+		return studsRepository.findByHeroStartingWith(prefix);
+	}
+	public List<Series> fetchHeroBySuffix(String suffix)
+	{
+		return studsRepository.findByHeroEndingWith(suffix);
+	}
+	
+	public List<Series> getSeriesByHero(String hero,String name)
+	{
+		return studsRepository.getSeriesByHero(hero,name);
+	}
+	
+@Transactional
+public int deleteSeriesByHero(String hero)
+{
+	return studsRepository.deleteSeriesByHero(hero);
+}
+
+@Transactional
+public int updateSeriesByHero(String hero,String name)
+{
+	return studsRepository.updateSeriesByHero(hero,name);
+}
+	
+public List<Series> fetchSeriesByHero(String hero)
+{
+	return studsRepository.fetchSeriesByHero(hero);
+}
+
 	
 
 }
